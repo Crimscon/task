@@ -19,13 +19,14 @@ public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonView(Views.IdName.class)
+    @EqualsAndHashCode.Include
+    @JsonView(Views.Id.class)
     private Long id;
 
     @JsonView(Views.IdName.class)
     private String name;
 
-    @OneToMany(mappedBy = "author")
-    @JsonView(Views.Books.class)
+    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+    @JsonView(Views.FullWithBooks.class)
     private Set<Books> books = new HashSet<>();
 }

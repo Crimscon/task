@@ -1,7 +1,15 @@
 package com.test.task.model;
 
-public final class Views {
-    public interface IdName { };
+public class Views {
+    public interface Id {
+    }
 
-    public interface Books extends IdName { };
+    public interface IdName extends Id {
+    }
+
+    public interface Full extends IdName {
+    }
+
+    public interface FullWithBooks extends IdName {
+    }
 }

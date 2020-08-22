@@ -5,6 +5,8 @@ import com.test.task.model.Author;
 import com.test.task.model.Views;
 import com.test.task.service.AuthorService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,31 +23,34 @@ public class AuthorController {
 
     @GetMapping
     @JsonView(Views.IdName.class)
-    public List<Author> getAllAuthors() {
-        return authorService.getAllAuthors();
+    public ResponseEntity<List<Author>> getAllAuthors() {
+        return new ResponseEntity<>(authorService.getAllAuthors(), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
-    @JsonView(Views.Books.class)
-    public Author getAuthor(@PathVariable("id") Author author) {
-        return author;
+    @JsonView(Views.FullWithBooks.class)
+    public ResponseEntity<Author> getAuthor(@PathVariable("id") Author author) {
+        return new ResponseEntity<>(author, HttpStatus.OK);
     }
 
     @PostMapping
-    public Author addAuthor(@RequestBody Author author) {
+    @JsonView(Views.Full.class)
+    public ResponseEntity<Author> addAuthor(@RequestBody Author author) {
         return authorService.addAuthor(author);
     }
 
     @PutMapping("/{id}")
-    public Author editAuthor(@PathVariable("id") Author authorFromDb, @RequestBody Author author) {
+    @JsonView(Views.Full.class)
+    public ResponseEntity<Author> editAuthor(@PathVariable("id") Author authorFromDb, @RequestBody Author author) {
         BeanUtils.copyProperties(author, authorFromDb, "id");
 
         return authorService.addAuthor(authorFromDb);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAuthor(@PathVariable("id") Author author) {
+    public ResponseEntity<HttpStatus> deleteAuthor(@PathVariable("id") Author author) {
         authorService.deleteAuthor(author);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

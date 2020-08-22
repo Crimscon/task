@@ -1,5 +1,6 @@
 package com.test.task.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,10 +17,15 @@ public class Books {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @EqualsAndHashCode.Include
+    @JsonView(Views.Id.class)
     private Long id;
 
+    @JsonView(Views.IdName.class)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonView(Views.Full.class)
     private Author author;
+
 }
